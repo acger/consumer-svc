@@ -10,4 +10,4 @@ Queue:
   Topic:
     - pair-chat
 Log:
-  Path: "/var/log/filebeat/consumer-svc"
+  Path: "/var/log/filebeat/consumer-svc/"

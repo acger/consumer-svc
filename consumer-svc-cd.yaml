@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: consumer-svc
+  namespace: default
+  labels:
+    app: consumer-svc
+spec:
+  replicas: 1
+  revisionHistoryLimit: 5
+  selector:
+    matchLabels:
+      app: consumer-svc
+  template:
+    metadata:
+      labels:
+        app: consumer-svc
+    spec:
+      containers:
+      - name: consumer-svc
+        image: docker.io/dk251626910/ffl-consumer-svc:latest
+        lifecycle:
+          preStop:
+            exec:
+              command: ["sh","-c","sleep 5"]
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+          limits:
+            cpu: 1000m
+            memory: 1024Mi
+        volumeMounts:
+        - name: timezone
+          mountPath: /etc/localtime
+        - name: varlog
+          mountPath: /var/log/filebeat
+      volumes:
+        - name: timezone
+          hostPath:
+            path: /usr/share/zoneinfo/Asia/Shanghai
+        - name: varlog
+          hostPath:
+            path: /var/log/filebeat
